@@ -402,7 +402,7 @@
             <!-- Normal Görünüm -->
             <div v-else>
               <div v-if="article.imageUrl" class="article-image-wrapper">
-                <img :src="`http://localhost:5000${article.imageUrl}`" class="article-image" alt="Kapak" />
+                <img :src="`https://bilfen-api-32fr.onrender.com](https://bilfen-api-32fr.onrender.com${article.imageUrl}`" class="article-image" alt="Kapak" />
               </div>
 
               <h2 class="article-title">{{ article.title }}</h2>
