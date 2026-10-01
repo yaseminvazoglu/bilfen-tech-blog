@@ -792,6 +792,9 @@ const fetchUserProfile = async () => {
       following[currentUser.value] = data.following;
       localStorage.setItem('bilfen_following', JSON.stringify(following));
     }
+
+    const savedBio = localStorage.getItem(`bilfen_user_bio_${currentUser.value}`);
+    userBio.value = savedBio ? savedBio : '';
   } catch (err) {
     console.error("Profil verisi çekilemedi:", err);
   }
@@ -804,7 +807,7 @@ const startEditingBio = () => {
 
 const saveBio = () => {
   userBio.value = tempBio.value;
-  localStorage.setItem('bilfen_user_bio', userBio.value);
+  localStorage.setItem(`bilfen_user_bio_${currentUser.value}`, userBio.value);
   isEditingBio.value = false;
 }
 
@@ -815,12 +818,6 @@ const searchQuery = ref('')
 onMounted(() => { 
   fetchArticles();
   
-  // YENİ: Nuxt SSR Hatalarını önlemek için localStorage erişimleri sayfa yüklendikten sonra yapılıyor
-  const savedBio = localStorage.getItem('bilfen_user_bio');
-  if (savedBio) {
-    userBio.value = savedBio;
-  }
-
   try {
     const savedFavs = localStorage.getItem('bilfen_favorites');
     if (savedFavs) {
