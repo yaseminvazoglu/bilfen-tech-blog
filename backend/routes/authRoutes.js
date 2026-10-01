@@ -42,8 +42,8 @@ router.post('/:username/follow', async (req, res) => {
       currentUser.following.push(targetUser.username);
     }
 
-    await targetUser.save();
-    await currentUser.save();
+    await User.updateOne({ username: targetUser.username }, { $set: { followers: targetUser.followers } });
+    await User.updateOne({ username: currentUser.username }, { $set: { following: currentUser.following } });
 
     res.json({ success: true, isFollowing: !isFollowing });
   } catch (err) {
