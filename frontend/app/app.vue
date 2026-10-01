@@ -1147,9 +1147,16 @@ const addArticle = async () => {
   if (selectedFile.value) { formData.append('image', selectedFile.value); }
 
   try {
-    await $fetch('https://bilfen-api-32fr.onrender.com/api/articles', { method: 'POST', body: formData });
+    await $fetch('https://bilfen-api-32fr.onrender.com/api/articles', { 
+      method: 'POST', 
+      body: formData,
+      headers: { Authorization: `Bearer ${token.value}` }
+    });
     newTitle.value = ''; newContent.value = ''; newCategory.value = ''; selectedFile.value = null; refresh();
-  } catch (err) { alert('Error!') }
+  } catch (err) { 
+    console.error('Makale ekleme hatası:', err);
+    alert('Hata detayı: ' + (err.data?.message || err.message || 'Bilinmeyen hata'));
+  }
 }
 
 const likeArticle = async (id) => {
@@ -1177,7 +1184,10 @@ const deleteArticle = async (id) => {
   if (confirm(currentLang.value === 'tr' ? "Bu makaleyi silmek istediğinize emin misiniz?" : "Are you sure you want to delete this article?")) {
     articles.value = articles.value.filter(article => article._id !== id);
     try {
-      await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { method: 'DELETE' }); 
+      await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { 
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token.value}` }
+      }); 
     } catch (err) { 
       refresh();
     }
@@ -1186,7 +1196,11 @@ const deleteArticle = async (id) => {
 
 const updateArticle = async (id) => {
   try {
-    await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { method: 'PUT', body: { title: editTitle.value, content: editContent.value, category: editCategory.value } })
+    await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { 
+      method: 'PUT', 
+      body: { title: editTitle.value, content: editContent.value, category: editCategory.value },
+      headers: { Authorization: `Bearer ${token.value}` }
+    });
     editingArticleId.value = null; refresh();
   } catch (err) { alert('Error!') }
 }
