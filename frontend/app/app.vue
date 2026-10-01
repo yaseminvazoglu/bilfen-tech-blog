@@ -785,7 +785,7 @@ const followersCount = ref(0);
 const fetchUserProfile = async () => {
   if (!currentUser.value) return;
   try {
-    const data = await $fetch(`http://localhost:5000/api/users/${currentUser.value}`);
+    const data = await $fetch(`https://bilfen-api-32fr.onrender.com/api/users/${currentUser.value}`);
     followersCount.value = data.followers ? data.followers.length : 0;
     
     if (data.following) {
@@ -865,7 +865,7 @@ const clearSavedCredential = () => {
 const register = async () => {
   if(!authUsername.value || !authEmail.value || !authPassword.value) return alert(currentLang.value === 'tr' ? "Lütfen tüm alanları doldurun!" : "Please fill in all fields!");
   try {
-    await $fetch('http://localhost:5000/api/auth/register', { method: 'POST', body: { username: authUsername.value, email: authEmail.value, password: authPassword.value } });
+    await $fetch('https://bilfen-api-32fr.onrender.com/api/auth/register', { method: 'POST', body: { username: authUsername.value, email: authEmail.value, password: authPassword.value } });
     alert(currentLang.value === 'tr' ? "Kayıt başarılı! Giriş yapabilirsiniz." : "Registration successful! You can now log in.");
     isLoginMode.value = true;
     isForgotPasswordMode.value = false;
@@ -876,7 +876,7 @@ const register = async () => {
 const login = async () => {
   if(!authUsername.value || !authPassword.value) return alert(currentLang.value === 'tr' ? "Kullanıcı adı ve şifre girin!" : "Enter username and password!");
   try {
-    const response = await $fetch('http://localhost:5000/api/auth/login', { method: 'POST', body: { username: authUsername.value, password: authPassword.value } });
+    const response = await $fetch('https://bilfen-api-32fr.onrender.com/api/auth/login', { method: 'POST', body: { username: authUsername.value, password: authPassword.value } });
     
     if (rememberMe.value) {
       localStorage.setItem('bilfen_saved_user', JSON.stringify({ u: authUsername.value, p: authPassword.value }));
@@ -933,7 +933,7 @@ const error = ref(null)
 const fetchArticles = async () => {
   pending.value = true
   try {
-    articles.value = await $fetch('http://localhost:5000/api/articles')
+    articles.value = await $fetch('https://bilfen-api-32fr.onrender.com/api/articles')
     error.value = null
   } catch (err) { error.value = err } finally { pending.value = false }
 }
@@ -1034,7 +1034,7 @@ const toggleFollow = async (authorName) => {
   if (authorName === currentUser.value) { alert(currentLang.value === 'tr' ? "Kendini takip edemezsin!" : "You can't follow yourself!"); return; }
   
   try {
-    await $fetch(`http://localhost:5000/api/users/${authorName}/follow`, {
+    await $fetch(`https://bilfen-api-32fr.onrender.com/api/users/${authorName}/follow`, {
       method: 'POST',
       body: { followerUsername: currentUser.value }
     });
@@ -1111,7 +1111,7 @@ const toggleSummary = async (article) => {
   isSummarizing[id] = true;
 
   try {
-    const response = await $fetch(`http://localhost:5000/api/articles/${id}/summary`, { method: 'POST' });
+    const response = await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}/summary`, { method: 'POST' });
     aiSummaries[id] = response.summary;
   } catch (err) {
     setTimeout(() => {
@@ -1147,14 +1147,14 @@ const addArticle = async () => {
   if (selectedFile.value) { formData.append('image', selectedFile.value); }
 
   try {
-    await $fetch('http://localhost:5000/api/articles', { method: 'POST', body: formData });
+    await $fetch('https://bilfen-api-32fr.onrender.com/api/articles', { method: 'POST', body: formData });
     newTitle.value = ''; newContent.value = ''; newCategory.value = ''; selectedFile.value = null; refresh();
   } catch (err) { alert('Error!') }
 }
 
 const likeArticle = async (id) => {
   if (!currentUser.value) { alert(currentLang.value === 'tr' ? "Lütfen giriş yapın!" : "Please log in!"); return; }
-  try { await $fetch(`http://localhost:5000/api/articles/${id}/like`, { method: 'PUT' }); refresh(); } catch (err) {}
+  try { await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}/like`, { method: 'PUT' }); refresh(); } catch (err) {}
 }
 
 const addComment = async (id) => {
@@ -1162,7 +1162,7 @@ const addComment = async (id) => {
   if (!text || text.trim() === '') return alert(currentLang.value === 'tr' ? "Boş yorum gönderilemez!" : "Empty comment!");
   const commentUser = currentUser.value || 'Misafir';
   try {
-    await $fetch(`http://localhost:5000/api/articles/${id}/comments`, { method: 'POST', body: { username: commentUser, text: text } });
+    await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}/comments`, { method: 'POST', body: { username: commentUser, text: text } });
     commentInputs[id] = ''; refresh();
   } catch (err) {}
 }
@@ -1177,7 +1177,7 @@ const deleteArticle = async (id) => {
   if (confirm(currentLang.value === 'tr' ? "Bu makaleyi silmek istediğinize emin misiniz?" : "Are you sure you want to delete this article?")) {
     articles.value = articles.value.filter(article => article._id !== id);
     try {
-      await $fetch(`http://localhost:5000/api/articles/${id}`, { method: 'DELETE' }); 
+      await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { method: 'DELETE' }); 
     } catch (err) { 
       refresh();
     }
@@ -1186,7 +1186,7 @@ const deleteArticle = async (id) => {
 
 const updateArticle = async (id) => {
   try {
-    await $fetch(`http://localhost:5000/api/articles/${id}`, { method: 'PUT', body: { title: editTitle.value, content: editContent.value, category: editCategory.value } })
+    await $fetch(`https://bilfen-api-32fr.onrender.com/api/articles/${id}`, { method: 'PUT', body: { title: editTitle.value, content: editContent.value, category: editCategory.value } })
     editingArticleId.value = null; refresh();
   } catch (err) { alert('Error!') }
 }
