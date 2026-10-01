@@ -785,7 +785,7 @@ const followersCount = ref(0);
 const fetchUserProfile = async () => {
   if (!currentUser.value) return;
   try {
-    const data = await $fetch(`https://bilfen-api-32fr.onrender.com/api/users/${currentUser.value}`);
+    const data = await $fetch(`https://bilfen-api-32fr.onrender.com/api/auth/${currentUser.value}`);
     followersCount.value = data.followers ? data.followers.length : 0;
     
     if (data.following) {
@@ -1034,7 +1034,7 @@ const toggleFollow = async (authorName) => {
   if (authorName === currentUser.value) { alert(currentLang.value === 'tr' ? "Kendini takip edemezsin!" : "You can't follow yourself!"); return; }
   
   try {
-    await $fetch(`https://bilfen-api-32fr.onrender.com/api/users/${authorName}/follow`, {
+    await $fetch(`https://bilfen-api-32fr.onrender.com/api/auth/${authorName}/follow`, {
       method: 'POST',
       body: { followerUsername: currentUser.value }
     });
